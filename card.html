@@ -226,4 +226,23 @@
     <script src="assets/bar.js"></script>
     <script src="assets/card.js"></script>
     <script src="assets/manifest.js"></script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        const savedPhoto = localStorage.getItem('mo_saved_image');
+        
+        
+        const docPhoto = document.querySelector('.human') || document.querySelector('.upload_uploaded') || document.querySelector('img[class*="human"]') || document.querySelector('.card img:not(.background)');
+        
+       
+        if (docPhoto && savedPhoto) {
+            docPhoto.src = savedPhoto;
+            docPhoto.style.display = 'block';
+            
+            
+            docPhoto.style.objectFit = 'cover';
+        }
+    });
+</script>
 </body>
