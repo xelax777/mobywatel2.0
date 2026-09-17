@@ -46,49 +46,65 @@ if (upload) {
 }
 
 // =========================================================================
-// UNIVERSAL & ROBUST PHOTO LOADER (NO MORE INFINITE LOADING)
+// INTELIGENTNY KOMPRESOR ZDJĘĆ - NAPRAWIA BRAK ZDJĘCIA W SKRÓCIE IPHONE
 // =========================================================================
 imageInput.addEventListener('change', (event) => {
     upload.classList.remove("upload_loaded");
     upload.classList.add("upload_loading");
     upload.removeAttribute("selected");
 
-    var file = imageInput.files[0];
+    var file = imageInput.files[0]; // Pobieramy wgrany plik
     if (file) {
         var reader = new FileReader();
         reader.onload = function(e) {
-            var localUrl = e.target.result;
-            
-            // 1. Save strictly to local storage so all subpages can access it
-            localStorage.setItem("mo_saved_image", localUrl);
+            var img = new Image();
+            img.onload = function() {
+                // Tworzymy wirtualne płótno do zmniejszenia rozdzielczości zdjęcia
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                
+                // Ustawiamy małe, dokumentowe wymiary (dzięki temu plik będzie ultra lekki)
+                canvas.width = 200;
+                canvas.height = 260;
+                
+                // Rysujemy pomniejszone zdjęcie
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // Generujemy lekki kod tekstowy zdjęcia
+                var compressedUrl = canvas.toDataURL('image/jpeg', 0.7);
 
-            // 2. Clear out errors and mark as loaded
-            upload.classList.remove("error_shown");
-            upload.setAttribute("selected", localUrl); 
-            upload.classList.add("upload_loaded");
-            upload.classList.remove("upload_loading");
-            
-            // 3. Find the preview image container and FORCE show the picture
-            var uploadedImg = upload.querySelector(".upload_uploaded") || upload.querySelector("img");
-            if (uploadedImg) {
-                uploadedImg.src = localUrl;
-                uploadedImg.style.display = 'block';
-                uploadedImg.style.position = 'absolute';
-                uploadedImg.style.top = '0';
-                uploadedImg.style.left = '0';
-                uploadedImg.style.width = '100%';
-                uploadedImg.style.height = '100%';
-                uploadedImg.style.objectFit = 'cover';
-                uploadedImg.style.zIndex = '10';
-            }
-            
-            // 4. Hide the text prompt so it doesn't overlap
-            var textPrompt = upload.querySelector(".upload_grid");
-            if (textPrompt) textPrompt.style.opacity = '0';
+                // Zapisujemy lekkie zdjęcie w pamięci podręcznej urządzenia
+                localStorage.setItem("mo_saved_image", compressedUrl);
+
+                // Czyścimy błędy walidacji i ustawiamy flagę załadowania
+                upload.classList.remove("error_shown");
+                upload.setAttribute("selected", compressedUrl); 
+                upload.classList.add("upload_loaded");
+                upload.classList.remove("upload_loading");
+                
+                // Wyświetlamy podgląd w formularzu
+                var uploadedImg = upload.querySelector(".upload_uploaded") || upload.querySelector("img");
+                if (uploadedImg) {
+                    uploadedImg.src = compressedUrl;
+                    uploadedImg.style.display = 'block';
+                    uploadedImg.style.position = 'absolute';
+                    uploadedImg.style.top = '0';
+                    uploadedImg.style.left = '0';
+                    uploadedImg.style.width = '100%';
+                    uploadedImg.style.height = '100%';
+                    uploadedImg.style.objectFit = 'cover';
+                    uploadedImg.style.zIndex = '10';
+                }
+                
+                var textPrompt = upload.querySelector(".upload_grid");
+                if (textPrompt) textPrompt.style.opacity = '0';
+            };
+            img.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
 });
+
 
 // Submit Button Logic
 document.querySelector(".go").addEventListener('click', () => {
