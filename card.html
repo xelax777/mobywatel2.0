@@ -225,24 +225,48 @@
     </div>
     <script src="assets/bar.js"></script>
     <script src="assets/card.js"></script>
-    <script src="assets/manifest.js"></script>
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Pobieramy wgrane w formularzu zdjęcie z pamięci podręcznej telefonu
+            const savedPhoto = localStorage.getItem('mo_saved_image');
+            
+            // 2. Namierzamy dokładnie ten element div, który w Twoim kodzie (linijka 134) trzyma zdjęcie
+            const targetPhotoBox = document.querySelector('.id_own_image');
+            
+            // 3. Podmieniamy tło na zdjęcie z pamięci urządzenia
+            if (targetPhotoBox && savedPhoto) {
+                targetPhotoBox.style.backgroundImage = "url('" + savedPhoto + "')";
+                targetPhotoBox.style.backgroundSize = "cover";
+                targetPhotoBox.style.backgroundPosition = "center";
+            }
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        
-        const savedPhoto = localStorage.getItem('mo_saved_image');
-        
-        
-        const docPhoto = document.querySelector('.human') || document.querySelector('.upload_uploaded') || document.querySelector('img[class*="human"]') || document.querySelector('.card img:not(.background)');
-        
-       
-        if (docPhoto && savedPhoto) {
-            docPhoto.src = savedPhoto;
-            docPhoto.style.display = 'block';
-            
-            
-            docPhoto.style.objectFit = 'cover';
-        }
-    });
-</script>
+            // 4. Pobieranie danych tekstowych wpisanych na samym początku
+            const savedName = localStorage.getItem('mo_saved_name');
+            const savedSurname = localStorage.getItem('mo_saved_surname');
+            const savedBirthday = localStorage.getItem('mo_saved_birthday');
+            const savedNationality = localStorage.getItem('mo_saved_nationality');
+            const savedPesel = localStorage.getItem('mo_saved_pesel');
+
+            // 5. Wstrzykiwanie tekstów w odpowiednie identyfikatory z Twojego kodu HTML
+            if (savedName && document.getElementById('name')) {
+                document.getElementById('name').innerText = savedName.toUpperCase();
+            }
+            if (savedSurname && document.getElementById('surname')) {
+                document.getElementById('surname').innerText = savedSurname.toUpperCase();
+            }
+            if (savedBirthday && document.getElementById('birthday')) {
+                document.getElementById('birthday').innerText = savedBirthday;
+            }
+            if (savedNationality && document.getElementById('nationality')) {
+                document.getElementById('nationality').innerText = savedNationality.toUpperCase();
+            }
+            if (savedPesel && document.getElementById('pesel')) {
+                document.getElementById('pesel').innerText = savedPesel;
+            }
+        });
+    </script>
+
+    <script src="assets/bar.js"></script>
+    <script src="assets/manifest.js"></script>
 </body>
+</html>
