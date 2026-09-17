@@ -585,11 +585,7 @@ input:focus{
 
 
 
-/* =========================================================================
-   NAPRAWIONE STYLE DLA MODUŁU DODAWANIA ZDJĘCIA (BRAKUJĄCY KOD AUTORA)
-   ========================================================================= */
 
-/* Ukrywamy standardowy podgląd wgranego obrazka, dopóki użytkownik go nie doda */
 .upload_uploaded {
     display: none;
     width: 100%;
@@ -602,7 +598,7 @@ input:focus{
     z-index: 5;
 }
 
-/* Kiedy zdjęcie jest w stanie ładowania (kręcące się nawiasy) */
+
 .upload_loading .upload_uploading {
     display: block !important;
 }
@@ -611,20 +607,20 @@ input:focus{
     display: none !important;
 }
 
-/* Kiedy zdjęcie zostało pomyślnie załadowane i zapisane w pamięci */
+
 .upload_loaded .upload_uploaded {
-    display: block !important; /* Pokazuje ukryty obrazek */
+    display: block !important; 
 }
 
 .upload_loaded .upload_uploading {
-    display: none !important;  /* Ukrywa zacinające się kółko ładowania ( ) */
+    display: none !important;  
 }
 
 .upload_loaded .upload_grid {
-    display: none !important;  /* Ukrywa stary tekst "Dodaj zdjęcie" */
+    display: none !important;  
 }
 
-/* Stylizacja błędu dla zdjęcia, jeśli ktoś kliknie "wejdź" bez pliku */
+
 .error_shown .error {
     opacity: 1 !important;
 }
